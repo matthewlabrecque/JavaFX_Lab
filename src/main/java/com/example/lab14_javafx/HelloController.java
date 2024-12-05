@@ -7,8 +7,6 @@ import javafx.scene.control.Label;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -20,6 +18,10 @@ public class HelloController {
 
     private String[] EasySongsArray = new String[]{};
     private String[] HardSongsArray = new String[]{};
+
+    // global variable to hold previously set value
+    // this is to prevent the code from outputting the same index value twice so it's always a different number
+    private int oldVal = 0;
 
     @FXML
     public void initialize() {
@@ -42,11 +44,19 @@ public class HelloController {
         Random rand = new Random();
         int value;
         if (cbMakeDifficult.isSelected()) {
-            value = rand.nextInt(HardSongsArray.length);
-            song.setText(HardSongsArray[value]);
+            // check if the values are the same and if they are it generates a new value
+            do {
+                value = rand.nextInt(HardSongsArray.length);
+            } while (value == oldVal);
+            song.setText("You should learn \"" + HardSongsArray[value] + "\"!");
         } else {
-            value = rand.nextInt(EasySongsArray.length);
-            song.setText(EasySongsArray[value]);
+            // check if the values are the same and if they are it generates a new value
+            do {
+                value = rand.nextInt(EasySongsArray.length);
+            } while (value == oldVal);
+            song.setText("You should learn \"" + EasySongsArray[value] + "\"!");
         }
+        // set oldValue equal to value
+        oldVal = value;
     }
 }
